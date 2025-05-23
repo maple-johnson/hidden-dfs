@@ -69,5 +69,53 @@ public class Traverse {
     v45.neighbors = new ArrayList<>(List.of(v23));
     v23.neighbors = new ArrayList<>(List.of());
     v67.neighbors = new ArrayList<>(List.of(v91));
+
+
+    System.out.println("********************");
+    System.out.println("Print Gossipers:");
+    printGossipers(alice);
+    System.out.println("********************");
+
+    System.out.println("Reachable:");
+    System.out.println(reachable(graph, 3, 56));
+    System.out.println(reachable(graph, 45, 3));
+    System.out.println("********************");
+
   }
+
+
+  public static boolean reachable(Map<Integer, Set<Integer>> graph, int start, int end)
+  {
+    Set<Integer> visted = new HashSet<>();
+    return reachable(graph, start, end, visted);
+  }
+  public static boolean reachable(Map<Integer, Set<Integer>> graph, int start, int end, Set<Integer> visited)
+  {
+    if (start == end) return true;
+    if (visited.contains(start) || graph == null || !graph.containsKey(start) || graph.get(start) == null) return false;
+    visited.add(start);
+    for (int neighbor : graph.get(start)) 
+    {
+      if (reachable(graph, neighbor, end, visited)) return true;
+    }
+    return false;
+  }
+  
+  public static void printGossipers(Person person)
+  {
+    Set<Person> visited = new HashSet<>();
+    printGossipers(person, visited);
+  }
+  public static void printGossipers(Person person, Set<Person> visited)
+  {
+    if (person == null || visited.contains(person))  return;
+    visited.add(person);
+    System.out.println(person.getName());
+    for (Person confidant : person.getConfidants())
+    {
+      printGossipers(confidant, visited);
+    }
+  }
+
+
 }
